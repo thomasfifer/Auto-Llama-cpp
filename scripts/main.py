@@ -398,7 +398,7 @@ while True:
     elif command_name == "human_feedback":
         result = f"Human feedback: {user_input}"
     else:
-        result = f"Command {command_name} returned: {cmd.execute_command(command_name, arguments)}"
+        result = f"Command {command_name} returned: {cmd.execute_command(command_name.lower(), arguments)}"
         if next_action_count > 0:
             next_action_count -= 1
 

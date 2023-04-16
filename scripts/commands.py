@@ -16,6 +16,9 @@ from googleapiclient.errors import HttpError
 
 cfg = Config()
 
+delete_agent_command = ["delete_agent", "delete agent", "delete gpt agent"]
+read_file_command = ["read_file", "read file", "read from file", "read to file"]
+search_files_command = ["search_files", "search_directory", "search files", "search directory"]
 
 def is_valid_int(value):
     try:
@@ -55,7 +58,7 @@ def execute_command(command_name, arguments):
     memory = get_memory(cfg)
 
     try:
-        if command_name == "google":
+        if "google" in command_name:
 
             # Check if the Google API key is set and use the official search method
             # If the API key is not set or has only whitespaces, use the unofficial search method
@@ -63,51 +66,51 @@ def execute_command(command_name, arguments):
                 return google_official_search(arguments["input"])
             else:
                 return google_search(arguments["input"])
-        elif command_name == "memory_add":
+        elif "memory" in command_name: # memory_add
             return memory.add(arguments["string"])
-        elif command_name == "start_agent":
+        elif "start" in command_name: # start_agent
             return start_agent(
                 arguments["name"],
                 arguments["task"],
                 arguments["prompt"])
-        elif command_name == "message_agent":
+        elif "message" in command_name: # message_agent
             return message_agent(arguments["key"], arguments["message"])
-        elif command_name == "list_agents":
+        elif "list" in command_name: # list_agents
             return list_agents()
-        elif command_name == "delete_agent":
+        elif any(cmd in command_name for cmd in delete_agent_command):
             return delete_agent(arguments["key"])
-        elif command_name == "get_text_summary":
+        elif "summary" in command_name: # get_text_summary
             return get_text_summary(arguments["url"], arguments["question"])
-        elif command_name == "get_hyperlinks":
+        elif "hyperlink" in command_name: # get_hyperlinks
             return get_hyperlinks(arguments["url"])
-        elif command_name == "read_file":
+        elif any(cmd in command_name for cmd in read_file_command):
             return read_file(arguments["file"])
-        elif command_name == "write_to_file":
+        elif "write" in command_name: #write_to_file
             return write_to_file(arguments["file"], arguments["text"])
-        elif command_name == "append_to_file":
+        elif "append" in command_name: # append_to_file
             return append_to_file(arguments["file"], arguments["text"])
-        elif command_name == "delete_file":
+        elif "delete" in command_name: # delete_file
             return delete_file(arguments["file"])
-        elif command_name == "search_files":
+        elif any(cmd in command_name for cmd in search_files_command): # search_files
             return search_files(arguments["directory"])
-        elif command_name == "browse_website":
+        elif "website" in command_name:
             return browse_website(arguments["url"], arguments["question"])
         # TODO: Change these to take in a file rather than pasted code, if
         # non-file is given, return instructions "Input should be a python
         # filepath, write your code to file and try again"
-        elif command_name == "evaluate_code":
+        elif "eval" in command_name: # evaluate_code
             return ai.evaluate_code(arguments["code"])
-        elif command_name == "improve_code":
+        elif "improve" in command_name: # improve_code
             return ai.improve_code(arguments["suggestions"], arguments["code"])
-        elif command_name == "write_tests":
+        elif "test" in command_name: # write_tests
             return ai.write_tests(arguments["code"], arguments.get("focus"))
-        elif command_name == "execute_python_file":  # Add this command
+        elif "execute" in command_name: # execute_python_file  # Add this command
             return execute_python_file(arguments["file"])
-        elif command_name == "generate_image":
+        elif "image" in command_name: # generate_image
             return generate_image(arguments["prompt"])
-        elif command_name == "do_nothing":
+        elif "nothing" in command_name: # do_nothing
             return "No action performed."
-        elif command_name == "task_complete":
+        elif "complete" in command_name: # task_complete
             shutdown()
         else:
             return f"Unknown command '{command_name}'. Please refer to the 'COMMANDS' list for availabe commands and only respond in the specified JSON format."
