@@ -49,6 +49,11 @@ def fix_and_parse_json(
     # So let's try to find the first brace and then parse the rest
     #  of the string
     try:
+        try:
+            response_start = json_str.index("Assistant:")
+            json_str = json_str[response_start:]
+        except Exception:
+            pass
         brace_index = json_str.index("{")
         json_str = json_str[brace_index:]
         last_brace_index = json_str.rindex("}")

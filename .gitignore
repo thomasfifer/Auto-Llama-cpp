@@ -1,3 +1,4 @@
+models/*
 scripts/keys.py
 scripts/*json
 scripts/node_modules/
@@ -12,3 +13,4 @@ outputs/*
 ai_settings.yaml
 .vscode
 auto-gpt.json
+log.txt
